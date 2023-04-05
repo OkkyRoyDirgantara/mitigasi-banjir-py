@@ -54,7 +54,7 @@ async def job_query_broadcast(context):
     sql_user = "SELECT id_user FROM users_telegram"
     id_user_query = config.db.database.query_all(sql_user)
     # query data broadcast
-    sql_broadcast = "SELECT id, message, is_send, created_at FROM MESSAGE_BROADCAST WHERE is_send = 0"
+    sql_broadcast = "SELECT id, message, is_send, created_at FROM message_broadcast WHERE is_send = 0"
     broadcast_query = config.db.database.query_all(sql_broadcast)
     # print(broadcast_query)
     # kirim pesan broadcast ke setiap user
