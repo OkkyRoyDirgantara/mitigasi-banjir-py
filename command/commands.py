@@ -30,23 +30,25 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     id_user_query = config.db.database.query_all(f"SELECT id_user FROM users_telegram WHERE id_user = {id_user}")
     logging.info(f"user_id={id_user}, first_name={first_name}, last_name={last_name}, username={username}")
     if len(id_user_query) > 0 and id_user == id_user_query[0][0]:
+        chat_user_save(id_user, update.message.text, created_at)
         pesan1 = rf'Halo {update.effective_user.mention_html()} ! Anda Sudah Terdaftar di Database Kami'
-        chat_bot_save(id_user, pesan1, created_at)
         pesan2 = rf'Silahkan Gunakan Command /help untuk melihat daftar command yang tersedia'
-        chat_bot_save(id_user, pesan2, created_at)
         return [await update.message.reply_html(pesan1),
-                await update.message.reply_text(pesan2)]
+                chat_bot_save(id_user, pesan1, created_at),
+                await update.message.reply_text(pesan2),
+                chat_bot_save(id_user, pesan2, created_at)]
+
     config.db.database.query_db(sql, val)
     chat_user_save(id_user, update.message.text, created_at)
 
     user = update.effective_user
 
     pesan1 = rf'Halo {update.effective_user.mention_html()} ! Selamat Datang di Bot Banjir Lamongan'
-    chat_bot_save(id_user, pesan1, created_at)
     pesan2 = rf'Silahkan Gunakan Command /help untuk melihat daftar command yang tersedia'
-    chat_bot_save(id_user, pesan2, created_at)
     return [await update.message.reply_html(pesan1),
-            await update.message.reply_text(pesan2)]
+            chat_bot_save(id_user, pesan1, created_at),
+            await update.message.reply_text(pesan2),
+            chat_bot_save(id_user, pesan2, created_at)]
 
 
 async def job_query_broadcast(context):
