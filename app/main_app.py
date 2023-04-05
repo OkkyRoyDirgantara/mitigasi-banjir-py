@@ -19,6 +19,8 @@ import logging
 import os
 from datetime import datetime
 
+import pytz
+
 import config.db.database
 
 from telegram import ForceReply, Update
@@ -92,7 +94,8 @@ def main() -> None:
 
     try:
         # Start the Application
-        now = datetime.now()
+        now = pytz.timezone('Asia/Jakarta')
+        now = datetime.now(now)
         print(f"Running: {now}")
         start_bot(now)
         application.run_polling()
@@ -100,16 +103,19 @@ def main() -> None:
         # SIGTERM or SIGABRT. This should be used most of the time, since
         # start_polling() is non-blocking and will stop the bot gracefully.
     except KeyboardInterrupt:
-        now = datetime.now()
+        now = pytz.timezone('Asia/Jakarta')
+        now = datetime.now(now)
         print(f"Stop Keyboard Interrupt: {now}")
         stop_bot(now)
         raise Exception("Bot is stopped")
     except Exception as e:
         logging.error(e)
-        now = datetime.now()
+        now = pytz.timezone('Asia/Jakarta')
+        now = datetime.now(now)
         print(f"Stop : {now} - {e}")
         stop_bot(now)
     finally:
-        now = datetime.now()
+        now = pytz.timezone('Asia/Jakarta')
+        now = datetime.now(now)
         print(f"Stop Finally: {now}")
         stop_bot(now)
