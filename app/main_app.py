@@ -19,7 +19,6 @@ import logging
 import os
 from datetime import datetime
 
-from retrying import retry
 import config.db.database
 
 from telegram import ForceReply, Update
