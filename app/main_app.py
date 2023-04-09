@@ -72,7 +72,11 @@ async def admin_chat(context) -> None:
 async def check_bot_status(context) -> None:
     await command.commands.job_check_bot_status(context)
 
+async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await command.commands.cek_cuaca(update, context)
 
+async def job_cuaca_broadcast(context) -> None:
+    await command.commands.job_cuaca_broadcast(context)
 # @retry(stop_max_attempt_number=3, wait_fixed=10000)
 def main() -> None:
     """Start the bot."""
@@ -84,8 +88,11 @@ def main() -> None:
     job_queue_broadcast.run_repeating(callback=main_broadcast, interval=10, first=0)
     job_queue_check_bot_status = application.job_queue
     job_queue_check_bot_status.run_repeating(callback=check_bot_status, interval=10, first=0)
+    job_queue_cuaca_broadcast = application.job_queue
+    job_queue_cuaca_broadcast.run_daily(callback=job_cuaca_broadcast, time=datetime.time(hour=5, tzinfo=pytz.timezone('Asia/Jakarta')))
     command_handlers = [CommandHandler("start", start),
                         CommandHandler("help", help_command),
+                        CommandHandler("cek_cuaca", cek_cuaca),
                         MessageHandler(filters.TEXT & ~filters.COMMAND, chat_from_user)]
     # on different commands - answer in Telegram
     # on non command i.e. message - echo the message on Telegram

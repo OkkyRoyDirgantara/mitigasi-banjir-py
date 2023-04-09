@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import pytz
 from telegram import Update, ForceReply
@@ -146,3 +147,141 @@ def chat_user_save(id_user, message, created_at):
     val = (id_user, message, created_at)
     config.db.database.query_db(sql, val)
     logging.info(f"Chat From user_id={id_user}, message={message}, created_at={created_at}")
+
+
+async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Echo the user message."""
+    id_user = update.message.chat.id
+    message = update.message.text
+    tz_jakarta = pytz.timezone('Asia/Jakarta')
+    dt = update.message.date.replace(tzinfo=pytz.utc).astimezone(tz_jakarta)
+    created_at = dt.strftime("%Y-%m-%d %H:%M:%S")
+    chat_user_save(id_user, message, created_at)
+
+    sql = f'SELECT h0, h6, h12, h18, updated_at FROM weathers where datetime = {dt.strftime("%Y%m%d")}'
+    sql_query = config.db.database.query_all(sql)
+    if sql_query == []:
+        pesan = f'Belum ada data cuaca untuk tanggal {dt.strftime("%d-%m-%Y")}'
+        return [await update.message.reply_text(pesan),
+                chat_bot_save(id_user, pesan, created_at)]
+    else:
+        kodecuaca = {"0": "Cerah",
+                     "1": "Cerah Berawan",
+                     "2": "Cerah Berawan",
+                     "3": "Berawan",
+                     "4": "Berawan Tebal",
+                     "5": "Udara Kabur",
+                     "10": "Asap",
+                     "45": "Kabut",
+                     "60": "Hujan Ringan",
+                     "61": "Hujan Sedang",
+                     "63": "Hujan Lebat",
+                     "80": "Hujan Lokal",
+                     "95": "Hujan Petir",
+                     "97": "Hujan Petir"}
+
+        pesan = (f'Cuaca di Lamongan hari ini\n\n'
+                 f'Pukul 00:00 - 06:00 : {kodecuaca[str(sql_query[0][0])]} \n'
+                 f'Pukul 06:00 - 12:00 : {kodecuaca[str(sql_query[0][1])]} \n'
+                 f'Pukul 12:00 - 18:00 : {kodecuaca[str(sql_query[0][2])]} \n'
+                 f'Pukul 18:00 - 24:00 : {kodecuaca[str(sql_query[0][3])]} \n'
+                 f'\n'
+                 f'Data Diperbarui : {sql_query[0][4]} \n'
+                 f'\n'
+                 f'Sumber : BMKG \n')
+
+        return [await update.message.reply_text(pesan),
+                chat_bot_save(id_user, pesan, created_at)]
+
+
+async def job_cuaca_broadcast(context):
+    tz_jakarta = pytz.timezone('Asia/Jakarta')
+    dt = datetime.now(tz_jakarta)
+    sql_cuaca = f'SELECT h0, h6, h12, h18, updated_at FROM weathers where datetime = {dt.strftime("%Y%m%d")}'
+    sql_query_cuaca = config.db.database.query_all(sql_cuaca)
+
+    sql_user = f'SELECT id_user FROM users_telegram'
+    sql_query_user = config.db.database.query_all(sql_user)
+
+    if sql_query_cuaca == []:
+        pesan = f'Belum ada data cuaca untuk tanggal {dt.strftime("%d-%m-%Y")}'
+        for i in sql_query_user:
+            try:
+                await context.bot.send_message(chat_id=i[0], text=pesan)
+                chat_bot_save(i[0], pesan, dt)
+            except Exception as e:
+                logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
+                continue
+    else:
+        kodecuaca = {"0": "Cerah",
+                     "1": "Cerah Berawan",
+                     "2": "Cerah Berawan",
+                     "3": "Berawan",
+                     "4": "Berawan Tebal",
+                     "5": "Udara Kabur",
+                     "10": "Asap",
+                     "45": "Kabut",
+                     "60": "Hujan Ringan",
+                     "61": "Hujan Sedang",
+                     "63": "Hujan Lebat",
+                     "80": "Hujan Lokal",
+                     "95": "Hujan Petir",
+                     "97": "Hujan Petir"}
+
+        if dt.hour >= 0 and dt.hour < 6:
+            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                     f'Pukul 00:00 - 06:00 : {kodecuaca[str(sql_query_cuaca[0][0])]} \n'
+                     f'\n'
+                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                     f'\n'
+                     f'Sumber : BMKG \n')
+            for i in sql_query_user:
+                try:
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
+                    chat_bot_save(i[0], pesan, dt)
+                except Exception as e:
+                    logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
+                    continue
+
+        elif dt.hour >= 6 and dt.hour < 12:
+            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                     f'Pukul 06:00 - 12:00 : {kodecuaca[str(sql_query_cuaca[0][1])]} \n'
+                     f'\n'
+                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                     f'\n'
+                     f'Sumber : BMKG \n')
+            for i in sql_query_user:
+                try:
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
+                    chat_bot_save(i[0], pesan, dt)
+                except Exception as e:
+                    logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
+                    continue
+        elif dt.hour >= 12 and dt.hour < 18:
+            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                     f'Pukul 12:00 - 18:00 : {kodecuaca[str(sql_query_cuaca[0][2])]} \n'
+                     f'\n'
+                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                     f'\n'
+                     f'Sumber : BMKG \n')
+            for i in sql_query_user:
+                try:
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
+                    chat_bot_save(i[0], pesan, dt)
+                except Exception as e:
+                    logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
+                    continue
+        elif dt.hour >= 18 and dt.hour < 24:
+            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                     f'Pukul 18:00 - 24:00 : {kodecuaca[str(sql_query_cuaca[0][3])]} \n'
+                     f'\n'
+                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                     f'\n'
+                     f'Sumber : BMKG \n')
+            for i in sql_query_user:
+                try:
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
+                    chat_bot_save(i[0], pesan, dt)
+                except Exception as e:
+                    logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
+                    continue
