@@ -17,7 +17,7 @@ bot.
 import asyncio
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, time
 
 import pytz
 
@@ -89,7 +89,20 @@ def main() -> None:
     job_queue_check_bot_status = application.job_queue
     job_queue_check_bot_status.run_repeating(callback=check_bot_status, interval=10, first=0)
     job_queue_cuaca_broadcast = application.job_queue
-    job_queue_cuaca_broadcast.run_daily(callback=job_cuaca_broadcast, time=datetime.time(hour=5, tzinfo=pytz.timezone('Asia/Jakarta')))
+
+    tz_jakarta = pytz.timezone('Asia/Jakarta')
+    time1 = time(hour=5, minute=0, second=0, tzinfo=tz_jakarta)
+    job_queue_cuaca_broadcast.run_daily(callback=job_cuaca_broadcast, time=time1)
+
+    time2 = time(hour=11, minute=0, second=0, tzinfo=tz_jakarta)
+    job_queue_cuaca_broadcast.run_daily(callback=job_cuaca_broadcast, time=time2)
+
+    time3 = time(hour=17, minute=0, second=0, tzinfo=tz_jakarta)
+    job_queue_cuaca_broadcast.run_daily(callback=job_cuaca_broadcast, time=time3)
+
+    time4 = time(hour=23, minute=0, second=0, tzinfo=tz_jakarta)
+    job_queue_cuaca_broadcast.run_daily(callback=job_cuaca_broadcast, time=time4)
+
     command_handlers = [CommandHandler("start", start),
                         CommandHandler("help", help_command),
                         CommandHandler("cek_cuaca", cek_cuaca),

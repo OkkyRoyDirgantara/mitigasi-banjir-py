@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 from telegram import Update, ForceReply
@@ -196,7 +196,7 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def job_cuaca_broadcast(context):
     tz_jakarta = pytz.timezone('Asia/Jakarta')
-    dt = datetime.now(tz_jakarta)
+    dt = datetime.now(tz_jakarta) + timedelta(hours=1)
     sql_cuaca = f'SELECT h0, h6, h12, h18, updated_at FROM weathers where datetime = {dt.strftime("%Y%m%d")}'
     sql_query_cuaca = config.db.database.query_all(sql_cuaca)
 
