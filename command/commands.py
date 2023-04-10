@@ -213,7 +213,7 @@ async def job_cuaca_broadcast(context):
         for i in sql_query_user:
             try:
                 await context.bot.send_message(chat_id=i[0], text=pesan)
-                chat_bot_save(i[0], pesan, dt)
+                chat_bot_save(i[0], pesan, get_string_time())
             except Exception as e:
                 logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                 continue
@@ -243,7 +243,7 @@ async def job_cuaca_broadcast(context):
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
-                    chat_bot_save(i[0], pesan, dt)
+                    chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
@@ -258,7 +258,7 @@ async def job_cuaca_broadcast(context):
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
-                    chat_bot_save(i[0], pesan, dt)
+                    chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
@@ -272,7 +272,7 @@ async def job_cuaca_broadcast(context):
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
-                    chat_bot_save(i[0], pesan, dt)
+                    chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
@@ -286,7 +286,7 @@ async def job_cuaca_broadcast(context):
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
-                    chat_bot_save(i[0], pesan, dt)
+                    chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
