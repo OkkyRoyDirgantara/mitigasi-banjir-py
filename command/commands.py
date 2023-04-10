@@ -156,12 +156,12 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tz_jakarta = pytz.timezone('Asia/Jakarta')
     dt = update.message.date.replace(tzinfo=pytz.utc).astimezone(tz_jakarta)
     created_at = dt.strftime("%Y-%m-%d %H:%M:%S")
-    chat_user_save(id_user, message, created_at)
 
     sql = f'SELECT h0, h6, h12, h18, updated_at FROM weathers where datetime = {dt.strftime("%Y%m%d")}'
     sql_query = config.db.database.query_all(sql)
     if sql_query == []:
         pesan = f'Belum ada data cuaca untuk tanggal {dt.strftime("%d-%m-%Y")}'
+        chat_user_save(id_user, message, created_at)
         return [await update.message.reply_text(pesan),
                 chat_bot_save(id_user, pesan, created_at)]
     else:
@@ -189,7 +189,7 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
                  f'Data Diperbarui : {sql_query[0][4]} \n'
                  f'\n'
                  f'Sumber : BMKG \n')
-
+        chat_user_save(id_user, message, created_at)
         return [await update.message.reply_text(pesan),
                 chat_bot_save(id_user, pesan, created_at)]
 

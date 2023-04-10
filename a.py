@@ -10,5 +10,4 @@ intHour = int(time_now.strftime("%H"))
 intMinute = int(time_now.strftime("%M"))
 print(intHour)
 print(intMinute)
-if time_now.hour == 5:
-    print(time_now)
+print(time_now)
