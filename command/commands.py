@@ -149,6 +149,11 @@ def chat_user_save(id_user, message, created_at):
     logging.info(f"Chat From user_id={id_user}, message={message}, created_at={created_at}")
 
 
+def get_string_time():
+    tz_jakarta = pytz.timezone('Asia/Jakarta')
+    dt = datetime.now().replace(tzinfo=pytz.utc).astimezone(tz_jakarta)
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
+
 async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Echo the user message."""
     id_user = update.message.chat.id
@@ -161,9 +166,9 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sql_query = config.db.database.query_all(sql)
     if sql_query == []:
         pesan = f'Belum ada data cuaca untuk tanggal {dt.strftime("%d-%m-%Y")}'
-        chat_user_save(id_user, message, created_at)
+        chat_user_save(id_user, message, get_string_time())
         return [await update.message.reply_text(pesan),
-                chat_bot_save(id_user, pesan, created_at)]
+                chat_bot_save(id_user, pesan, get_string_time())]
     else:
         kodecuaca = {"0": "Cerah",
                      "1": "Cerah Berawan",
@@ -189,9 +194,9 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
                  f'Data Diperbarui : {sql_query[0][4]} \n'
                  f'\n'
                  f'Sumber : BMKG \n')
-        chat_user_save(id_user, message, created_at)
+        chat_user_save(id_user, message, get_string_time())
         return [await update.message.reply_text(pesan),
-                chat_bot_save(id_user, pesan, created_at)]
+                chat_bot_save(id_user, pesan, get_string_time())]
 
 
 async def job_cuaca_broadcast(context):
