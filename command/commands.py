@@ -27,29 +27,29 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Insert data user ke dalam tabel user
     sql = "INSERT INTO users_telegram (id_user, photo, username, first_name, last_name, created_at) VALUES (%s, %s, %s, %s, %s, %s)"
-    val = (id_user, photo, username, first_name, last_name, created_at)
+    val = (id_user, photo, username, first_name, last_name, get_string_time())
     id_user_query = config.db.database.query_all(f"SELECT id_user FROM users_telegram WHERE id_user = {id_user}")
     logging.info(f"user_id={id_user}, first_name={first_name}, last_name={last_name}, username={username}")
     if len(id_user_query) > 0 and id_user == id_user_query[0][0]:
-        chat_user_save(id_user, update.message.text, created_at)
+        chat_user_save(id_user, update.message.text, get_string_time())
         pesan1 = rf'Halo {update.effective_user.mention_html()} ! Anda Sudah Terdaftar di Database Kami'
         pesan2 = rf'Silahkan Gunakan Command /help untuk melihat daftar command yang tersedia'
         return [await update.message.reply_html(pesan1),
-                chat_bot_save(id_user, pesan1, created_at),
+                chat_bot_save(id_user, pesan1, get_string_time()),
                 await update.message.reply_text(pesan2),
-                chat_bot_save(id_user, pesan2, created_at)]
+                chat_bot_save(id_user, pesan2, get_string_time())]
 
     config.db.database.query_db(sql, val)
-    chat_user_save(id_user, update.message.text, created_at)
+    chat_user_save(id_user, update.message.text, get_string_time())
 
     user = update.effective_user
 
     pesan1 = rf'Halo {update.effective_user.mention_html()} ! Selamat Datang di Bot Banjir Lamongan'
     pesan2 = rf'Silahkan Gunakan Command /help untuk melihat daftar command yang tersedia'
     return [await update.message.reply_html(pesan1),
-            chat_bot_save(id_user, pesan1, created_at),
+            chat_bot_save(id_user, pesan1, get_string_time()),
             await update.message.reply_text(pesan2),
-            chat_bot_save(id_user, pesan2, created_at)]
+            chat_bot_save(id_user, pesan2, get_string_time())]
 
 
 async def job_query_broadcast(context):
@@ -72,7 +72,7 @@ async def job_query_broadcast(context):
             if is_send == 0:
                 try:
                     await context.bot.send_message(chat_id=id_user[0], text=message)
-                    chat_bot_save(id_user[0], message, created_at)
+                    chat_bot_save(id_user[0], message, get_string_time())
                     # update status is_send
                     sql_update = "UPDATE message_broadcast SET is_send = 1 WHERE id = %s"
                     val = (id_broadcast,)
@@ -129,7 +129,7 @@ async def chat_from_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tz_jakarta = pytz.timezone('Asia/Jakarta')
     dt = update.message.date.replace(tzinfo=pytz.utc).astimezone(tz_jakarta)
     created_at = dt.strftime("%Y-%m-%d %H:%M:%S")
-    chat_user_save(id_user, message, created_at)
+    chat_user_save(id_user, message, get_string_time())
 
 
 def chat_bot_save(id_user, message, created_at):

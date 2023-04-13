@@ -16,13 +16,22 @@ mydb = mysql.connector.connect(
 def query_db(sql, val):
     mydb.connect()
     rundb = mydb.cursor()
-    mydb.start_transaction()
-    rundb.execute(sql, val)
-    mydb.commit()
-    mydb.close()
+    try:
+        mydb.start_transaction()
+        rundb.execute(sql, val)
+        mydb.commit()
+    except Exception as e:
+        mydb.rollback()
+        raise e
+    finally:
+        rundb.close()
+        mydb.close()
 
 def query_all(sql):
     mydb.connect()
     rundb = mydb.cursor()
     rundb.execute(sql)
-    return rundb.fetchall()
+    result = rundb.fetchall()
+    rundb.close()
+    mydb.close()
+    return result
