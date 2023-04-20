@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 
 import pytz
 from telegram import Update, ForceReply
-from telegram.constants import ParseMode
 
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
@@ -71,7 +70,7 @@ async def job_query_broadcast(context):
             print(is_send)
             if is_send == 0:
                 try:
-                    await context.bot.send_message(chat_id=id_user[0], text=message, parse_mode=ParseMode.HTML)
+                    await context.bot.send_message(chat_id=id_user[0], text=message)
                     chat_bot_save(id_user[0], message, get_string_time())
                     # update status is_send
                     sql_update = "UPDATE message_broadcast SET is_send = 1 WHERE id = %s"
@@ -99,7 +98,7 @@ async def job_query_admin_chat(context):
         created_at = chat[5]
         if is_send == 0:
             try:
-                await context.bot.send_message(chat_id=id_user, text=message, parse_mode=ParseMode.HTML)
+                await context.bot.send_message(chat_id=id_user, text=message)
                 # update status is_send
                 sql_update = "UPDATE chat_admins SET is_send = 1 WHERE id = %s"
                 val = (id_chat,)
@@ -213,7 +212,7 @@ async def job_cuaca_broadcast(context):
         pesan = f'Belum ada data cuaca untuk tanggal {dt.strftime("%d-%m-%Y")}'
         for i in sql_query_user:
             try:
-                await context.bot.send_message(chat_id=i[0], text=pesan, parse_mode=ParseMode.HTML)
+                await context.bot.send_message(chat_id=i[0], text=pesan)
                 chat_bot_save(i[0], pesan, get_string_time())
             except Exception as e:
                 logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
@@ -243,7 +242,7 @@ async def job_cuaca_broadcast(context):
                      f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
-                    await context.bot.send_message(chat_id=i[0], text=pesan, parse_mode=ParseMode.HTML)
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
                     chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
@@ -258,7 +257,7 @@ async def job_cuaca_broadcast(context):
                      f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
-                    await context.bot.send_message(chat_id=i[0], text=pesan, parse_mode=ParseMode.HTML)
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
                     chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
@@ -272,7 +271,7 @@ async def job_cuaca_broadcast(context):
                      f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
-                    await context.bot.send_message(chat_id=i[0], text=pesan, parse_mode=ParseMode.HTML)
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
                     chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
@@ -286,7 +285,7 @@ async def job_cuaca_broadcast(context):
                      f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
-                    await context.bot.send_message(chat_id=i[0], text=pesan, parse_mode=ParseMode.HTML)
+                    await context.bot.send_message(chat_id=i[0], text=pesan)
                     chat_bot_save(i[0], pesan, get_string_time())
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
