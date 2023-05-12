@@ -21,7 +21,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # menyimpan foto profil pengguna
     photo = None
     photos = await context.bot.getUserProfilePhotos(id_user)
-    print(photos)
     if photos.total_count > 0:
         photo = photos.photos[0][-1].file_id
 
@@ -65,9 +64,7 @@ async def job_query_broadcast(context):
         for broadcast in broadcast_query:
             id_broadcast = broadcast[0]
             message = broadcast[1]
-            print(broadcast)
             is_send = broadcast[2]
-            print(is_send)
             if is_send == 0:
                 try:
                     await context.bot.send_message(chat_id=id_user[0], text=message)
@@ -290,3 +287,39 @@ async def job_cuaca_broadcast(context):
                 except Exception as e:
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    sql_command = 'SELECT description from command where command = "/help"'
+    sql_query_command = config.db.database.query_all(sql_command)
+    """Show all commands"""
+    pesan = f'{sql_query_command[0][0]}'
+    await update.message.reply_text(pesan)
+    chat_bot_save(update.message.chat_id, pesan, get_string_time())
+
+async def tips_mitigasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    sql_command = 'SELECT description from command where command = "/tips_mitigasi"'
+    sql_query_command = config.db.database.query_all(sql_command)
+    pesan = f'{sql_query_command[0][0]}'
+    await update.message.reply_text(pesan)
+    chat_bot_save(update.message.chat_id, pesan, get_string_time())
+
+async def tips_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    sql_command = 'SELECT description from command where command = "/tips_evakuasi"'
+    sql_query_command = config.db.database.query_all(sql_command)
+    pesan = f'{sql_query_command[0][0]}'
+    await update.message.reply_text(pesan)
+    chat_bot_save(update.message.chat_id, pesan, get_string_time())
+
+async def cek_banjir(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    sql_command = 'SELECT description from command where command = "/cek_banjir"'
+    sql_query_command = config.db.database.query_all(sql_command)
+    pesan = f'{sql_query_command[0][0]}'
+    await update.message.reply_text(pesan)
+    chat_bot_save(update.message.chat_id, pesan, get_string_time())
+
+async def lokasi_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    sql_command = 'SELECT description from command where command = "/lokasi_evakuasi"'
+    sql_query_command = config.db.database.query_all(sql_command)
+    pesan = f'{sql_query_command[0][0]}'
+    await update.message.reply_text(pesan)
+    chat_bot_save(update.message.chat_id, pesan, get_string_time())

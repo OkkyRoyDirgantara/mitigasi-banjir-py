@@ -53,8 +53,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /help is issued."""
-    await update.message.reply_text("Help!")
+    await command.commands.help_command(update, context)
 
 
 async def chat_from_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -77,6 +76,19 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def job_cuaca_broadcast(context) -> None:
     await command.commands.job_cuaca_broadcast(context)
+
+async def tips_mitigasi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await command.commands.tips_mitigasi(update, context)
+
+async def tips_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await command.commands.tips_evakuasi(update, context)
+
+async def cek_banjir(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await command.commands.cek_banjir(update, context)
+
+async def lokasi_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await command.commands.lokasi_evakuasi(update, context)
+
 # @retry(stop_max_attempt_number=3, wait_fixed=10000)
 def main() -> None:
     """Start the bot."""
@@ -106,6 +118,10 @@ def main() -> None:
     command_handlers = [CommandHandler("start", start),
                         CommandHandler("help", help_command),
                         CommandHandler("cek_cuaca", cek_cuaca),
+                        CommandHandler("tips_mitigasi", tips_mitigasi),
+                        CommandHandler("tips_evakuasi", tips_evakuasi),
+                        CommandHandler("cek_banjir", cek_banjir),
+                        CommandHandler("lokasi_evakuasi", lokasi_evakuasi),
                         MessageHandler(filters.TEXT & ~filters.COMMAND, chat_from_user)]
     # on different commands - answer in Telegram
     # on non command i.e. message - echo the message on Telegram
