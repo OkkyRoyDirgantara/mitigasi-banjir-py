@@ -195,7 +195,11 @@ async def cek_cuaca(update: Update, context: ContextTypes.DEFAULT_TYPE):
                  f'\n'
                  f'Data Diperbarui : {sql_query[0][4]} \n'
                  f'\n'
-                 f'Sumber : BMKG \n')
+                 f'Sumber : BMKG \n'
+                 f'\n'
+                 
+                 f'Laporkan kami jika menemukan informasi darurat'
+                 f'Call Center : 112 \n')
         chat_user_save(id_user, message, get_string_time())
         return [await update.message.reply_html(pesan),
                 chat_bot_save(id_user, pesan, get_string_time())]
