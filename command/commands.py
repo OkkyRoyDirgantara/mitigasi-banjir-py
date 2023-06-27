@@ -124,8 +124,13 @@ async def chat_from_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.message.text
     tz_jakarta = pytz.timezone('Asia/Jakarta')
     dt = update.message.date.replace(tzinfo=pytz.utc).astimezone(tz_jakarta)
-    created_at = dt.strftime("%Y-%m-%d %H:%M:%S")
     chat_user_save(id_user, message, get_string_time())
+    pesan = rf'Maaf, command {message} tidak ditemukan! chatbot tidak mengenali command tersebut'
+    pesanHelp = rf'Silahkan Gunakan Command /help untuk melihat daftar command yang tersedia'
+    return [await update.message.reply_html(pesan),
+            chat_bot_save(id_user, pesan, get_string_time()),
+            await update.message.reply_html(pesanHelp),
+            chat_bot_save(id_user, pesanHelp, get_string_time())]
 
 
 def chat_bot_save(id_user, message, created_at):
@@ -289,6 +294,8 @@ async def job_cuaca_broadcast(context):
                     continue
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message.text
+    chat_user_save(update.message.chat_id, message, get_string_time())
     sql_command = 'SELECT description from command where command = "/help"'
     sql_query_command = config.db.database.query_all(sql_command)
     """Show all commands"""
@@ -297,6 +304,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_bot_save(update.message.chat_id, pesan, get_string_time())
 
 async def tips_mitigasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message.text
+    chat_user_save(update.message.chat_id, message, get_string_time())
     sql_command = 'SELECT description from command where command = "/tips_mitigasi"'
     sql_query_command = config.db.database.query_all(sql_command)
     pesan = f'{sql_query_command[0][0]}'
@@ -304,6 +313,8 @@ async def tips_mitigasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_bot_save(update.message.chat_id, pesan, get_string_time())
 
 async def tips_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message.text
+    chat_user_save(update.message.chat_id, message, get_string_time())
     sql_command = 'SELECT description from command where command = "/tips_evakuasi"'
     sql_query_command = config.db.database.query_all(sql_command)
     pesan = f'{sql_query_command[0][0]}'
@@ -311,6 +322,8 @@ async def tips_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_bot_save(update.message.chat_id, pesan, get_string_time())
 
 async def cek_banjir(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message.text
+    chat_user_save(update.message.chat_id, message, get_string_time())
     sql_command = 'SELECT description from command where command = "/cek_banjir"'
     sql_query_command = config.db.database.query_all(sql_command)
     pesan = f'{sql_query_command[0][0]}'
@@ -318,6 +331,8 @@ async def cek_banjir(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_bot_save(update.message.chat_id, pesan, get_string_time())
 
 async def lokasi_evakuasi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message.text
+    chat_user_save(update.message.chat_id, message, get_string_time())
     sql_command = 'SELECT description from command where command = "/lokasi_evakuasi"'
     sql_query_command = config.db.database.query_all(sql_command)
     pesan = f'{sql_query_command[0][0]}'

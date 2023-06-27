@@ -122,7 +122,7 @@ def main() -> None:
                         CommandHandler("tips_evakuasi", tips_evakuasi),
                         CommandHandler("cek_banjir", cek_banjir),
                         CommandHandler("lokasi_evakuasi", lokasi_evakuasi),
-                        MessageHandler(filters.TEXT & ~filters.COMMAND, chat_from_user)]
+                        MessageHandler(filters.TEXT, chat_from_user)]
     # on different commands - answer in Telegram
     # on non command i.e. message - echo the message on Telegram
     for handler in command_handlers:
