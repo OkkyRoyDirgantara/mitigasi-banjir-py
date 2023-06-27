@@ -235,13 +235,26 @@ async def job_cuaca_broadcast(context):
                      "95": "Hujan Petir",
                      "97": "Hujan Petir"}
 
+        kemungkinan_banjir = ["Hujan Lebat", "Hujan Lokal", "Hujan Petir"]
+
+
         if dt.hour >= 0 and dt.hour < 6:
-            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
-                     f'Pukul 00:00 - 06:00 : {kodecuaca[str(sql_query_cuaca[0][0])]} \n'
-                     f'\n'
-                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
-                     f'\n'
-                     f'Sumber : BMKG \n')
+            if kodecuaca[str(sql_query_cuaca[0][0])] in kemungkinan_banjir:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 00:00 - 06:00 : {kodecuaca[str(sql_query_cuaca[0][0])]} \n'
+                         f'\n'
+                         f'Kemungkinan terjadi banjir jika hujan lebih dari 3 jam \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
+            else:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 00:00 - 06:00 : {kodecuaca[str(sql_query_cuaca[0][0])]} \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
@@ -251,12 +264,22 @@ async def job_cuaca_broadcast(context):
                     continue
 
         elif dt.hour >= 6 and dt.hour < 12:
-            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
-                     f'Pukul 06:00 - 12:00 : {kodecuaca[str(sql_query_cuaca[0][1])]} \n'
-                     f'\n'
-                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
-                     f'\n'
-                     f'Sumber : BMKG \n')
+            if kodecuaca[str(sql_query_cuaca[0][1])] in kemungkinan_banjir:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 06:00 - 12:00 : {kodecuaca[str(sql_query_cuaca[0][1])]} \n'
+                         f'\n'
+                         f'Kemungkinan terjadi banjir jika hujan lebih dari 3 jam \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
+            else:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 06:00 - 12:00 : {kodecuaca[str(sql_query_cuaca[0][1])]} \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
@@ -265,12 +288,22 @@ async def job_cuaca_broadcast(context):
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
         elif dt.hour >= 12 and dt.hour < 18:
-            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
-                     f'Pukul 12:00 - 18:00 : {kodecuaca[str(sql_query_cuaca[0][2])]} \n'
-                     f'\n'
-                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
-                     f'\n'
-                     f'Sumber : BMKG \n')
+            if kodecuaca[str(sql_query_cuaca[0][2])] in kemungkinan_banjir:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 12:00 - 18:00 : {kodecuaca[str(sql_query_cuaca[0][2])]} \n'
+                         f'\n'
+                         f'Kemungkinan terjadi banjir jika hujan lebih dari 3 jam \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
+            else:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 12:00 - 18:00 : {kodecuaca[str(sql_query_cuaca[0][2])]} \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
@@ -279,12 +312,22 @@ async def job_cuaca_broadcast(context):
                     logging.error(f"Error Broadcast Cuaca id_user={i[0]}")
                     continue
         elif dt.hour >= 18 and dt.hour < 24:
-            pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
-                     f'Pukul 18:00 - 24:00 : {kodecuaca[str(sql_query_cuaca[0][3])]} \n'
-                     f'\n'
-                     f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
-                     f'\n'
-                     f'Sumber : BMKG \n')
+            if kodecuaca[str(sql_query_cuaca[0][3])] in kemungkinan_banjir:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 18:00 - 24:00 : {kodecuaca[str(sql_query_cuaca[0][3])]} \n'
+                         f'\n'
+                         f'Kemungkinan terjadi banjir jika hujan lebih dari 3 jam \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
+            else:
+                pesan = (f'Cuaca di Lamongan pukul {dt.strftime("%H:%M:%S")} \n\n'
+                         f'Pukul 18:00 - 24:00 : {kodecuaca[str(sql_query_cuaca[0][3])]} \n'
+                         f'\n'
+                         f'Data Diperbarui : {sql_query_cuaca[0][4]} \n'
+                         f'\n'
+                         f'Sumber : BMKG \n')
             for i in sql_query_user:
                 try:
                     await context.bot.send_message(chat_id=i[0], text=pesan)
