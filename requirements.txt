@@ -1,0 +1,6 @@
+pytz
+mysql
+mysql.connector
+python-dotenv
+python-telegram-bot
+python-telegram-bot[job-queue]
